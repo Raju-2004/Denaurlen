@@ -19,9 +19,9 @@ const HomePage = () => {
         <ActivityCard number={2} text='One Platform Multiple Persona' image={Image2}/>
         <ActivityCard number={3} text='Real you, rewards for you!' image={Image3}/>
       </div>
-      <div className='w-36 pl-7 my-16 mx-[700px] py-2 gap-0 bg-indigo text-white rounded-lg'>
+      <button className='w-36 h-10 my-12 flex justify-center items-center mx-[680px] gap-0 bg-indigo text-white rounded-lg'>
         Get Started
-      </div>
+      </button>
     </div>
   )
 }

@@ -9,7 +9,7 @@ const ActivityCard = ({ number, text, image }: Props) => {
   return (
     <div className="flex-col justify-center items-center">
       <div className="flex gap-4 ml-10 py-3">
-        <div className="w-10 h-10 rounded-full px-3 py-1 border-2 border-gray-800 bg-light_gray border-dashed">
+        <div className="w-10 h-10 rounded-full flex justify-center items-center border-2 border-gray-800 bg-light_gray border-dashed">
           {number}
         </div>
         <div className="font-lato text-lg font-semibold leading-9 text-left">

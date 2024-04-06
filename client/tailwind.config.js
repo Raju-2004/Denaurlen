@@ -8,7 +8,8 @@ module.exports = {
       colors : {
         indigo : '#4B0082',
         lavender : '#F7F2FF',
-        light_gray : '#F5F5F5'
+        light_gray : '#F5F5F5',
+        h2 : '#343434'
       },
       backgroundImage:{
         'Wave':"url('assets/Vector 3.svg')",
