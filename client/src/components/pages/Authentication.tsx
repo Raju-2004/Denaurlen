@@ -1,28 +1,17 @@
-import React, { useState } from "react";
-import Image from "../assets/04 Login-SignUp 1.png";
-import { Link } from "react-router-dom";
-import ForgotModal from "./modal/ForgotModal";
-import Signin from "./Signin";
-import NewModal from "./modal/NewModal";
-import OtpModal from "./modal/OtpModal";
-import Signup from "./Signup";
-import Success from "./modal/Success";
-const Authentication = () => {
-  const [isFocused, setIsFocused] = useState<boolean>(false);
-  const [isModalOpen, setIsModalOpen] = useState<"forgot" | "new" | "otp" | "success" | null>(null);
+import Image from "../../assets/04 Login-SignUp 1.png";
+import { Outlet} from "react-router-dom";
+import ForgotModal from "../modal/ForgotModal";
+import NewModal from "../modal/NewModal";
+import OtpModal from "../modal/OtpModal";
+import Success from "../modal/Success";
 
-  const openModal = (modalType : "forgot" | "new" | "otp" | "success") => {
-    setIsModalOpen(modalType);
-  };
-  const closeModal = () => {
-    setIsModalOpen(null);
-  };
-  const handleFocus = () => {
-    setIsFocused(true);
-  };
-  const handleBlur = () => {
-    setIsFocused(false);
-  };
+
+interface Props {
+  openModal: (modalType: "forgot" | "new" | "otp" | "success") => void;
+  closeModal: () => void;
+  isModalOpen: "forgot" | "new" | "otp" | "success" | null;
+}
+const Authentication = ({openModal,closeModal,isModalOpen}:Props) => {
   return (
     <div className="grid grid-cols-2">
       <div className="px-36 mt-8">
@@ -34,7 +23,7 @@ const Authentication = () => {
             Connect & Collect..!
           </p>
         </div>
-        <Signin openForgotModal={() => openModal("forgot")} handleFocus={handleFocus} handleBlur={handleBlur} isFocused={isFocused}/>
+        <Outlet/>
         <div className="w-96 mt-16 flex-col justify-center items-center">
             <p className="text-indigo text-center">Privacy Policy</p>
             <p>Denaurlen Copyright @ 2021, All Rights Reserved</p>
@@ -51,9 +40,7 @@ const Authentication = () => {
           <img src={Image} alt="Login-SignUp" />
         </div>
       </div>
-      {isModalOpen === 'forgot' && (
-        <ForgotModal closeModal={closeModal} openOtpModal = {() => openModal("otp")}/>
-      )}
+      {isModalOpen === 'forgot' && (<ForgotModal closeModal={closeModal} openOtpModal = {() => openModal("otp")}/>)}
       {isModalOpen === 'new' && (<NewModal closeModal={closeModal} openSuccessModal={() => openModal("success")}/>)}
       {isModalOpen === 'otp' && (<OtpModal closeModal={closeModal} openNewModal={() => openModal('new')}/>)}
       {isModalOpen === 'success' && (<Success closeModal={closeModal}/>)}

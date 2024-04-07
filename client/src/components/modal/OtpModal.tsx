@@ -26,7 +26,7 @@ const OtpModal = ({closeModal,openNewModal}:Props) => {
   }
   return (
     <div className="fixed top-0 left-0 z-50 w-full h-full bg-black bg-opacity-50 flex justify-center items-center">
-      <div className="bg-white py-10 px-8 rounded-lg">
+      <div className="bg-white py-10 px-8 w-[435px] h-[312px] rounded-lg">
         <h2 className="text-2xl font-bold text-indigo">OTP VERIFICATION</h2>
         <p className="font-medium text-lg mb-3 text-gray-400">
         Enter 4 digit one time password
