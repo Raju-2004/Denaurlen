@@ -1,3 +1,4 @@
+require('dotenv').config()
 const express = require("express");
 const Router = express.Router();
 const nm = require("nodemailer");
@@ -58,6 +59,9 @@ async function sendMail(email,otp) {
 }
 
 Router.post("/sendemail", async (req, res) => {
+  console.log(CLIENT_ID)
+  console.log(REFRESH_TOKEN)
+  console.log(CLIENT_SECRET)
   const { email } = req.body;
   const otp = generateOTP();
   const otpExpiration = Date.now() + 5 * 60 * 1000;

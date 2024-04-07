@@ -5,6 +5,7 @@ const { mongoDbUrL, PORT } = require("./config/configuration");
 
 const User = require('./models/UserSchema')
 const userRoutes = require('./routes/user')
+const otpRoutes = require('./routes/Otp')
 
 app.use(express.urlencoded({extended:true}))
 app.use(express.json())
@@ -26,6 +27,7 @@ app.get('/',(req,res)=>{
 })
 
 app.use('/',userRoutes)
+app.use('/',otpRoutes)
 
 app.listen(PORT, () => {
     console.log("app is listening at " + `http://localhost:${PORT}`);
