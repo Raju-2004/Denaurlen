@@ -1,28 +1,63 @@
-import React,{useRef} from 'react'
+import React,{useRef,useState} from 'react'
+import { useLocation } from 'react-router-dom'
+import { useAppSelector } from '../utils/AppStore'
 
 interface Props {
   closeModal : () => void
   openNewModal : () => void
 }
 const OtpModal = ({closeModal,openNewModal}:Props) => {
+
+  const Email = useAppSelector(state=>state.email.email)
+  console.log(Email)
+  const [errorMessage, setErrorMessage] = useState<string>('');
+  const location = useLocation()
   const onHandleSubmit = () => {
-    closeModal()
-    openNewModal()
+    /* closeModal()
+    openNewModal() */
+    let otp = '';
+    inputRefs.current.forEach((input) => {
+      otp += input?.value || '';
+    });
+    console.log(otp)
+    console.log(location)
   }
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
 
   const handleKeyDown = (event :React.KeyboardEvent<HTMLInputElement>,index : number) => {
-    if(event.key === 'Enter')
-      {
-        const nextIndex = index + 1;
-        if(inputRefs.current[nextIndex])
-          {
-            inputRefs.current[nextIndex]?.focus()
-          }
-          else{
-            event.currentTarget.blur()
-          }
+    const keyCode = event.keyCode || event.which;
+    const isNumericKey = (keyCode >= 48 && keyCode <= 57) || (keyCode >= 96 && keyCode <= 105);
+    const isBackspaceKey = keyCode === 8 || keyCode === 46;
+
+    if (!isNumericKey && !isBackspaceKey) {
+      event.preventDefault();
+      setErrorMessage('Please enter only numeric values.');
+      return;
+    } else {
+      setErrorMessage('');
+    }
+    if (keyCode >= 48 && keyCode <= 57) {
+      const value = String.fromCharCode(keyCode);
+      event.preventDefault();
+
+      inputRefs.current[index]?.focus();
+      inputRefs.current[index]?.setAttribute('value', value);
+      inputRefs.current[index]?.dispatchEvent(new Event('input', { bubbles: true }));
+
+      if (index < inputRefs.current.length - 1) {
+        inputRefs.current[index + 1]?.focus();
       }
+    } else if (keyCode === 8 || keyCode === 46) {
+      event.preventDefault();
+
+      if (index >= 0) {
+        inputRefs.current[index]?.blur();
+        inputRefs.current[index]?.setAttribute('value', '');
+        inputRefs.current[index]?.dispatchEvent(new Event('input', { bubbles: true }));
+
+        inputRefs.current[index - 1]?.focus();
+      }
+    }
   }
   return (
     <div className="fixed top-0 left-0 z-50 w-full h-full bg-black bg-opacity-50 flex justify-center items-center">
@@ -42,6 +77,7 @@ const OtpModal = ({closeModal,openNewModal}:Props) => {
             />
           ))}
         </div>
+        {errorMessage && <span className="text-red-500 text-center ml-8 pb-3">{errorMessage}</span>}
         <div className="flex justify-between">
           <button
             onClick={closeModal}

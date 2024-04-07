@@ -1,3 +1,4 @@
+import { useState } from "react";
 import Image from "../../assets/04 Login-SignUp 1.png";
 import { Outlet} from "react-router-dom";
 import ForgotModal from "../modal/ForgotModal";
@@ -12,6 +13,11 @@ interface Props {
   isModalOpen: "forgot" | "new" | "otp" | "success" | null;
 }
 const Authentication = ({openModal,closeModal,isModalOpen}:Props) => {
+  const [email, setEmail] = useState<string>("");
+  const handleOpenOtpModal = (email: string) => {
+    setEmail(email);
+    openModal("otp");
+  };
   return (
     <div className="grid grid-cols-2">
       <div className="px-36 mt-8">

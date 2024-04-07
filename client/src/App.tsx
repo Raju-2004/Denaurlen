@@ -5,7 +5,8 @@ import Authentication from "./components/pages/Authentication";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Signup from "./components/Signup";
 import Signin from "./components/Signin";
-
+import { Provider } from "react-redux";
+import appStore from "./components/utils/AppStore";
 function App() {
   const [isFocused, setIsFocused] = useState<boolean>(false);
   const [isModalOpen, setIsModalOpen] = useState<"forgot" | "new" | "otp" | "success" | null>(null);
@@ -23,7 +24,8 @@ function App() {
     setIsFocused(false);
   };
   return (
-    <div className="">
+    <Provider store={appStore}>
+      <div className="">
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<HomePage />} />
@@ -41,6 +43,7 @@ function App() {
               path="signup"
               element={
                 <Signup
+                  openOtpModal = {()=> openModal('otp')}
                 />
               }
             ></Route>
@@ -56,6 +59,7 @@ function App() {
         </Routes>
       </BrowserRouter>
     </div>
+    </Provider>
   );
 }
 
