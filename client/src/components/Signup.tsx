@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import { IoPerson } from "react-icons/io5";
 import { Link } from "react-router-dom";
-import { toast } from "react-toastify";
-import { toastConfig } from "./Config/toastConfig";
+import { notifyError,notifySuccess} from "./Config/toastConfig";
 import { MdOutlineAlternateEmail } from "react-icons/md";
 import { CiLock } from "react-icons/ci";
 import Input from "./Input";
@@ -19,11 +18,6 @@ const Signup = ({ openOtpModal, openCoinModal }: Props) => {
 
   const isVerify = useAppSelector((state) => state.Verify.isVerify);
   const [formSubmitted, setFormSubmitted] = useState<boolean>(false);
-
-  const notifySuccess = (message: string) =>
-    toast.success(message, toastConfig);
-  const notifyError = (errorMessage: string) =>
-    toast.warn(errorMessage, toastConfig);
 
   const [FormData, SetFormData] = useState({
     FirstName: "",

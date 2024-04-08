@@ -1,4 +1,3 @@
-import { MdOutlineAlternateEmail } from "react-icons/md";
 import { CiLock } from "react-icons/ci";
 import Input from '../Input';
 import { useState } from "react";

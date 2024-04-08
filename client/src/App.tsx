@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import "./App.css";
 import HomePage from "./components/pages/HomePage";
 import Authentication from "./components/pages/Authentication";
@@ -10,6 +10,9 @@ import Signin from "./components/Signin";
 import { Provider } from "react-redux";
 import appStore from "./components/utils/AppStore";
 import CategoryPage from "./components/pages/CategoryPage";
+import Dashboard from "./components/Dashboard";
+
+
 function App() {
   const [isModalOpen, setIsModalOpen] = useState<"forgot" | "new" | "otp" | "success" | "coin" | null>(null);
 
@@ -25,7 +28,7 @@ function App() {
 
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<HomePage />} />
+          <Route path="/" element={<Dashboard/>} />
           <Route
             path="/auth"
             element={

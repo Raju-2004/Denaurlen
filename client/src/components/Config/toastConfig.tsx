@@ -14,7 +14,7 @@ export const toastConfig : ToastOptions = {
   export const notifySuccess = (message: string) =>
     toast.success(message, toastConfig);
   export const notifyWarn = (errorMessage: string) =>
-    toast.error(errorMessage, toastConfig);
+    toast.warn(errorMessage, toastConfig);
   export const notifyError = (warnMessage : string) =>
-    toast.warn(warnMessage,toastConfig)
+    toast.error(warnMessage,toastConfig)
 
