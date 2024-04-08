@@ -2,6 +2,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import emailReducer from "./EmailSlice"; // Import the reducer, not the slice
 import VerifyReducer from './VerifySlice'
 import categoryReducer from './CategorySlice'
+import LoadReducer from './LoadSlice'
 import { TypedUseSelectorHook, useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 
@@ -9,7 +10,8 @@ const appStore = configureStore({
   reducer: {
     email: emailReducer, // Use the reducer
     Verify : VerifyReducer,
-    category : categoryReducer
+    category : categoryReducer,
+    Load : LoadReducer
   },
 });
 

@@ -1,12 +1,15 @@
 import React, { useState } from "react";
 import { IoPerson } from "react-icons/io5";
 import { Link } from "react-router-dom";
-import { notifyError,notifySuccess} from "./Config/toastConfig";
+import { notifyError, notifySuccess } from "./Config/toastConfig";
 import { MdOutlineAlternateEmail } from "react-icons/md";
 import { CiLock } from "react-icons/ci";
 import Input from "./Input";
-import { useAppDispatch, useAppSelector } from "./utils/AppStore";
-import { setEmail } from "./utils/EmailSlice";
+import { useAppDispatch, useAppSelector } from "./store/AppStore";
+import { setEmail } from "./store/EmailSlice";
+import { setLoad } from "./store/LoadSlice";
+import { TiTick } from "react-icons/ti";
+import Spinner from "./Spinner";
 
 interface Props {
   openOtpModal: () => void;
@@ -15,8 +18,8 @@ interface Props {
 
 const Signup = ({ openOtpModal, openCoinModal }: Props) => {
   const dispatch = useAppDispatch();
-
   const isVerify = useAppSelector((state) => state.Verify.isVerify);
+  const isLoad = useAppSelector((state) => state.Load.isLoad);
   const [formSubmitted, setFormSubmitted] = useState<boolean>(false);
 
   const [FormData, SetFormData] = useState({
@@ -31,7 +34,7 @@ const Signup = ({ openOtpModal, openCoinModal }: Props) => {
   const [errors, setErrors] = useState({
     Email: "",
     Password: "",
-    ConfirmPassword:""
+    ConfirmPassword: "",
   });
 
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -58,14 +61,14 @@ const Signup = ({ openOtpModal, openCoinModal }: Props) => {
     }
 
     if (name === "ConfirmPassword" && value !== FormData.Password) {
-      ConfirmErrorMessage = "Passwords do not match"
+      ConfirmErrorMessage = "Passwords do not match";
     }
 
     setErrors((prevErrors) => ({
       ...prevErrors,
       Email: emailErrorMessage,
       Password: passwordErrorMessage,
-      ConfirmPassword : ConfirmErrorMessage
+      ConfirmPassword: ConfirmErrorMessage,
     }));
   };
 
@@ -110,6 +113,7 @@ const Signup = ({ openOtpModal, openCoinModal }: Props) => {
   };
 
   const onVerifyClick = () => {
+    dispatch(setLoad({ isLoad: true }));
     const isValidEmail = emailRegex.test(FormData.Email);
     if (!isValidEmail) {
       setErrors((prevErrors) => ({
@@ -118,7 +122,6 @@ const Signup = ({ openOtpModal, openCoinModal }: Props) => {
       }));
       return;
     }
-
     dispatch(setEmail({ email: FormData.Email }));
     console.log("sending mail");
     fetch("http://localhost:4000/sendemail", {
@@ -136,6 +139,9 @@ const Signup = ({ openOtpModal, openCoinModal }: Props) => {
       })
       .catch((error) => {
         console.error("Error sending email:", error);
+      })
+      .finally(() => {
+        dispatch(setLoad({ isLoad: false }));
       });
   };
 
@@ -174,7 +180,15 @@ const Signup = ({ openOtpModal, openCoinModal }: Props) => {
             onClick={onVerifyClick}
             className="absolute cursor-pointer top-3 text-1xl right-2 text-indigo"
           >
-            verify
+            {isVerify ? (
+              <>
+                <TiTick className="inline-block text-green-500 w-5 h-5 ml-1" />
+              </>
+            ) : isLoad ? (
+              <Spinner />
+            ) : (
+              <>Verify</>
+            )}
           </Link>
         </div>
         {errors.Email && <span className="text-red-500">{errors.Email}</span>}

@@ -20,7 +20,7 @@ const HomePage = () => {
         <ActivityCard number={2} text='One Platform Multiple Persona' image={Image2}/>
         <ActivityCard number={3} text='Real you, rewards for you!' image={Image3}/>
       </div>
-      <Link to='/auth/signup' className='w-36 h-10 my-12 flex justify-center items-center mx-[680px] gap-0 bg-indigo text-white rounded-lg'>
+      <Link to='/auth/signup' className='w-36 h-10 my-16 flex justify-center items-center mx-[680px] gap-0 bg-indigo text-white rounded-lg'>
         Get Started
       </Link>
     </div>

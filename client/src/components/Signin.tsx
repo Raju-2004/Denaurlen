@@ -4,6 +4,8 @@ import { CiLock } from "react-icons/ci";
 import { useNavigate, Link } from "react-router-dom";
 import { notifyError, notifySuccess, notifyWarn } from "./Config/toastConfig";
 import Input from "./Input";
+import img from '../assets/search 1.svg'
+
 interface Props {
   openForgotModal: () => void;
 }
@@ -37,6 +39,7 @@ const Signin = ({ openForgotModal }: Props) => {
     })
       .then(async(res) => {
         const response = await res.json(); 
+        console.log(response);
         if(res.ok)
         {
           notifySuccess(response.message)
@@ -69,7 +72,7 @@ const Signin = ({ openForgotModal }: Props) => {
         />
         <div className="flex w-96 my-5 justify-between">
           <div>
-            <input type="checkbox" id="checkbox" />
+            <input className="mr-1" type="checkbox" id="checkbox" />
             <label htmlFor="checkbox">Remainder Me</label>
           </div>
           <Link
@@ -91,10 +94,11 @@ const Signin = ({ openForgotModal }: Props) => {
         <div className="text-1xl">OR</div>
         <span className="w-44 h-[2px] bg-gray-300"></span>
       </div>
-      <div className="flex justify-center items-center w-96 p-3 my-4 text-lg border border-gray-300 rounded-lg">
-        <button className="w-full h-full ">Sign in With Google</button>
+      <div className="flex justify-center gap-2 items-center w-96 py-3 my-4 text-lg border border-gray-300 rounded-lg">
+        <img src={img} alt="" />
+        <button>Sign in With Google</button>
       </div>
-      <div className="flex justify-center w-96">
+      <div className="flex gap-2 justify-center w-96">
         <p>Are you new to Denaurlen?</p>
         <Link to="/auth/signup" className="text-indigo">
           Sign Up

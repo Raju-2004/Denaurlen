@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { MdOutlineAlternateEmail } from "react-icons/md";
-import { useAppDispatch, useAppSelector } from "../utils/AppStore";
-import { setEmail } from "../utils/EmailSlice";
+import { useAppDispatch, useAppSelector } from "../store/AppStore";
+import { setEmail } from "../store/EmailSlice";
+import { setLoad } from "../store/LoadSlice";
+import Spinner from "../Spinner";
 
 interface Props {
   closeModal: () => void;
@@ -11,6 +13,7 @@ interface Props {
 const ForgotModal = ({ closeModal, openOtpModal }: Props) => {
 
   const dispatch = useAppDispatch();
+  const isLoad = useAppSelector((state)=> state.Load.isLoad)
   // const [isUserMail, SetIsUserMail] = useState<boolean>(false);
   const [ForgotEmail, SetForgotEmail] = useState<string>("");
   const [Error, SetError] = useState("");
@@ -39,6 +42,7 @@ const ForgotModal = ({ closeModal, openOtpModal }: Props) => {
   };
 
   const onHandleSubmit = async () => {
+    dispatch(setLoad({isLoad:true}))
     try {
       const response = await fetch("http://localhost:4000/checkmail", {
         method: "POST",
@@ -89,7 +93,7 @@ const ForgotModal = ({ closeModal, openOtpModal }: Props) => {
             onClick={onHandleSubmit}
             className="w-44 h-12  flex justify-center items-center  hover:bg-indigo bg-light_gray hover:text-white rounded-lg"
           >
-            Submit
+            {isLoad ? <Spinner/> : <>submit</>}
           </button>
         </div>
       </div>

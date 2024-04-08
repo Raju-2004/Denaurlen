@@ -1,6 +1,6 @@
 import { useState } from "react";
 import Image from "../../assets/04 Login-SignUp 1.png";
-import { Outlet} from "react-router-dom";
+import { Outlet, useLocation} from "react-router-dom";
 import ForgotModal from "../modal/ForgotModal";
 import NewModal from "../modal/NewModal";
 import OtpModal from "../modal/OtpModal";
@@ -14,6 +14,7 @@ interface Props {
 }
 const Authentication = ({openModal,closeModal,isModalOpen}:Props) => {
 
+  const location = useLocation()
   const [dataForSuccess, setDataForSuccess] = useState<any[]>([]);
   
 
@@ -27,7 +28,7 @@ const Authentication = ({openModal,closeModal,isModalOpen}:Props) => {
       <div className="px-36 mt-8">
         <div>
           <p className="text-3xl text-indigo font-bold leading-6 text-left">
-            Sign In
+            {location.pathname === '/auth/signin' ? "Sign In":'Sign Up'}
           </p>
           <p className="font-medium mt-3 text-2xl text-gray-400">
             Connect & Collect..!

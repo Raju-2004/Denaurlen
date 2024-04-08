@@ -1,7 +1,7 @@
 import { CiLock } from "react-icons/ci";
 import Input from '../Input';
 import { useState } from "react";
-import { useAppSelector } from "../utils/AppStore";
+import { useAppSelector } from "../store/AppStore";
 
 interface Props {
   closeModal : () => void

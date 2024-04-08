@@ -27,6 +27,7 @@ import {
   travelIcon10,
   travelIcon11,
 } from "../Config/Images";
+import { Link } from "react-router-dom";
 
 // import
 const CategoryPage = () => {
@@ -81,7 +82,7 @@ const CategoryPage = () => {
           ))}
         </div>
         <div className="mt-8 flex justify-center items-center">
-          <button className="shadow-sm w-20 h-10 bg-indigo text-white rounded-lg">Next</button>
+          <Link to="/dashboard" className="shadow-sm w-20 h-10 px-5 pt-2 bg-indigo text-white rounded-lg">Next</Link>
         </div>
       </div>
     </div>

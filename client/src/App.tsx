@@ -8,9 +8,9 @@ import 'react-toastify/dist/ReactToastify.css';
 import Signup from "./components/Signup";
 import Signin from "./components/Signin";
 import { Provider } from "react-redux";
-import appStore from "./components/utils/AppStore";
+import appStore from "./components/store/AppStore";
 import CategoryPage from "./components/pages/CategoryPage";
-import Dashboard from "./components/Dashboard";
+import Dashboard from "./components/pages/Dashboard";
 
 
 function App() {
@@ -28,7 +28,7 @@ function App() {
 
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Dashboard/>} />
+          <Route path="/" element={<HomePage/>} />
           <Route
             path="/auth"
             element={
@@ -58,6 +58,7 @@ function App() {
             ></Route>
           </Route>
           <Route path="/categories" element={<CategoryPage/>}/>
+          <Route path="/dashboard" element={<Dashboard/>}/>
         </Routes>
         <ToastContainer/>
       </BrowserRouter>

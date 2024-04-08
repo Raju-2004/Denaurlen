@@ -1,8 +1,8 @@
 import React, { useRef, useState } from "react";
 import { useLocation } from "react-router-dom";
-import { useAppSelector, useAppDispatch } from "../utils/AppStore";
-import { setVerify } from "../utils/VerifySlice";
-
+import { useAppSelector, useAppDispatch } from "../store/AppStore";
+import { setVerify } from "../store/VerifySlice";
+import { setLoad } from "../store/LoadSlice";
 interface Props {
   closeModal: () => void;
   openNewModal: () => void;
@@ -47,9 +47,11 @@ const OtpModal = ({
           console.log(location.pathname);
           if (location.pathname === "/auth/signup") {
             dispatch(setVerify({ isVerify: true }));
+            dispatch(setLoad({isLoad:false}))
             setData(["email", "verified"]);
             openSuccessModal();
           } else if (location.pathname === "/auth/signin") {
+            dispatch(setLoad({isLoad:false}))
             openNewModal();
           }
         } else {
@@ -69,9 +71,10 @@ const OtpModal = ({
   ) => {
     const keyCode = event.keyCode || event.which;
     const isNumericKey =
-      (keyCode >= 48 && keyCode <= 57) || (keyCode >= 96 && keyCode <= 105);
+      (keyCode >= 48 && keyCode <= 57) || // Regular number keys
+      (keyCode >= 96 && keyCode <= 105);   // Numpad number keys
     const isBackspaceKey = keyCode === 8 || keyCode === 46;
-
+  
     if (!isNumericKey && !isBackspaceKey) {
       event.preventDefault();
       setErrorMessage("Please enter only numeric values.");
@@ -79,33 +82,35 @@ const OtpModal = ({
     } else {
       setErrorMessage("");
     }
-    if (keyCode >= 48 && keyCode <= 57) {
-      const value = String.fromCharCode(keyCode);
+  
+    if (isNumericKey) {
+      const value = String.fromCharCode(keyCode >= 96 ? keyCode - 48 : keyCode);
       event.preventDefault();
-
+  
       inputRefs.current[index]?.focus();
       inputRefs.current[index]?.setAttribute("value", value);
       inputRefs.current[index]?.dispatchEvent(
         new Event("input", { bubbles: true })
       );
-
+  
       if (index < inputRefs.current.length - 1) {
         inputRefs.current[index + 1]?.focus();
       }
-    } else if (keyCode === 8 || keyCode === 46) {
+    } else if (isBackspaceKey) {
       event.preventDefault();
-
+  
       if (index >= 0) {
         inputRefs.current[index]?.blur();
         inputRefs.current[index]?.setAttribute("value", "");
         inputRefs.current[index]?.dispatchEvent(
           new Event("input", { bubbles: true })
         );
-
+  
         inputRefs.current[index - 1]?.focus();
       }
     }
   };
+  
   return (
     <div className="fixed top-0 left-0 z-50 w-full h-full bg-black bg-opacity-50 flex justify-center items-center">
       <div className="bg-white py-10 px-8 w-[435px] h-[312px] rounded-lg">
@@ -119,7 +124,7 @@ const OtpModal = ({
               key={index}
               ref={(el) => (inputRefs.current[index] = el)}
               type="text"
-              className="w-14 h-14 p-4 text-1xl bg-light_gray focus:outline-none"
+              className="w-14 h-14 p-4 text-1xl text-center bg-light_gray focus:outline-none"
               onKeyDown={(event) => handleKeyDown(event, index)}
             />
           ))}
