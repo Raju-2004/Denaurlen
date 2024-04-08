@@ -6,63 +6,68 @@ const jwt = require("jsonwebtoken");
 
 router.post("/signup", async (req, res) => {
   try {
-    const { FirstName, LastName, Location, Email, username, Password } =
-      req.body;
+    const { FirstName, LastName, Email, UserName, Password } = req.body;
 
-    const existingUser = await User.findOne({ $or: [{ username }, { Email }] });
-    if (existingUser) {
-      return res
-        .status(400)
-        .json({ error: "Username or email already exists" });
+    if (!req.body.UserName) {
+      return res.status(400).json({ error: "UserName is required" });
     }
 
-    const HashedPassword = await bcrypt.hash(Password, 10);
+    const existingUser = await User.findOne({ $or: [{ UserName }, { Email }] });
+    if (existingUser) {
+      return res.status(400).json({ error: "UserName or email already exists" });
+    }
+
+    // Hash password
+    const hashedPassword = await bcrypt.hash(Password, 10);
+
+    // Create new user
     const newUser = new User({
       FirstName,
       LastName,
-      Location,
       Email,
-      username,
-      Password: HashedPassword,
+      UserName,
+      Password: hashedPassword,
     });
-    await newUser.save();
+
+    // Save new user to database
     console.log(newUser);
-    res.status(201).json({ message: "User Created successfully" });
+    await newUser.save();
+    console.log("created");
+    res.status(201).json({ message: "User created successfully" });
   } catch (err) {
-      console.log(err);
-      res.status(500).json({ message: "Internal server error" });
+    console.error(err);
+    res.status(500).json({ message: "Internal server error" });
   }
 });
 
-
 router.post('/login', async (req,res)=>{
-    try{
-        console.log(process.env.ACCESS_SECRET_TOKEN)
-        const {username,Password} = req.body;
-        const user = await User.find({username});
-        console.log(user)
-        if(!user) {
-            return res.status(400).json({message:"User not found"})
-        }
-        const isValidPassword = await bcrypt.compare(Password,user.Password)
-        if(!isValidPassword)
-        {
-          return res.status(401).json({message:"Invalid Password"})
-        }
-        jwt.sign({username : user.username},'secret-key',(err,token)=>{
-            if(err){
-                console.error(err)
-                return res.status(500).json({message : "Internal server error"})
-            }
-            return res
-            .status(200)
-            .json({message:"Login successful",token : token})
-        })
+  try {
+    const { UserName, Password } = req.body;
+
+    // Find user by UserName
+    const user = await User.findOne({ UserName });
+    if (!user) {
+      return res.status(400).json({ message: "User not found" });
     }
-    catch (err) {
+
+    // Compare passwords
+    const isValidPassword = await bcrypt.compare(Password, user.Password);
+    if (!isValidPassword) {
+      return res.status(401).json({ message: "Invalid Password" });
+    }
+
+    // Generate JWT token
+    jwt.sign({ UserName: user.UserName }, 'secret-key', (err, token) => {
+      if (err) {
         console.error(err);
         return res.status(500).json({ message: "Internal server error" });
-    }
-})
+      }
+      res.status(200).json({ message: "Login successful", token: token });
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
 
 module.exports = router;

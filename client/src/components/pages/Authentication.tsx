@@ -5,19 +5,23 @@ import ForgotModal from "../modal/ForgotModal";
 import NewModal from "../modal/NewModal";
 import OtpModal from "../modal/OtpModal";
 import Success from "../modal/Success";
-
+import CoinModal from "../modal/CoinModal";
 
 interface Props {
-  openModal: (modalType: "forgot" | "new" | "otp" | "success") => void;
+  openModal: (modalType: "forgot" | "new" | "otp" | "success" | "coin") => void;
   closeModal: () => void;
-  isModalOpen: "forgot" | "new" | "otp" | "success" | null;
+  isModalOpen: "forgot" | "new" | "otp" | "success" | "coin" | null;
 }
 const Authentication = ({openModal,closeModal,isModalOpen}:Props) => {
-  const [email, setEmail] = useState<string>("");
-  const handleOpenOtpModal = (email: string) => {
-    setEmail(email);
-    openModal("otp");
+
+  const [dataForSuccess, setDataForSuccess] = useState<any[]>([]);
+  
+
+  const setOtpModalData = (data: any[]) => {
+    setDataForSuccess(data);
   };
+
+
   return (
     <div className="grid grid-cols-2">
       <div className="px-36 mt-8">
@@ -48,8 +52,9 @@ const Authentication = ({openModal,closeModal,isModalOpen}:Props) => {
       </div>
       {isModalOpen === 'forgot' && (<ForgotModal closeModal={closeModal} openOtpModal = {() => openModal("otp")}/>)}
       {isModalOpen === 'new' && (<NewModal closeModal={closeModal} openSuccessModal={() => openModal("success")}/>)}
-      {isModalOpen === 'otp' && (<OtpModal closeModal={closeModal} openNewModal={() => openModal('new')}/>)}
-      {isModalOpen === 'success' && (<Success closeModal={closeModal}/>)}
+      {isModalOpen === 'otp' && (<OtpModal closeModal={closeModal} openNewModal={() => openModal('new')} openSuccessModal={() => openModal("success")} setData={setOtpModalData} />)}
+      {isModalOpen === 'success' && (<Success closeModal={closeModal} data={dataForSuccess}/>)}
+      {isModalOpen === 'coin' && <CoinModal closeModal={closeModal}/>}
     </div>
   );
 };

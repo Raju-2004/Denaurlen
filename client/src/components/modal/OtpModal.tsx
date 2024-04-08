@@ -1,48 +1,90 @@
-import React,{useRef,useState} from 'react'
-import { useLocation } from 'react-router-dom'
-import { useAppSelector } from '../utils/AppStore'
+import React, { useRef, useState } from "react";
+import { useLocation } from "react-router-dom";
+import { useAppSelector,useAppDispatch } from "../utils/AppStore";
+import Success from "./Success";
+import { setVerify } from "../utils/VerifySlice";
 
 interface Props {
-  closeModal : () => void
-  openNewModal : () => void
+  closeModal: () => void;
+  openNewModal: () => void;
+  openSuccessModal: () => void;
+  setData: (data: any[]) => void;
 }
-const OtpModal = ({closeModal,openNewModal}:Props) => {
+const OtpModal = ({
+  closeModal,
+  openNewModal,
+  openSuccessModal,
+  setData,
+}: Props) => {
 
-  const Email = useAppSelector(state=>state.email.email)
-  console.log(Email)
-  const [errorMessage, setErrorMessage] = useState<string>('');
-  const location = useLocation()
+  const dispatch = useAppDispatch();
+  const Email = useAppSelector((state) => state.email.email);
+  console.log(Email);
+  const [errorMessage, setErrorMessage] = useState<string>("");
+  const location = useLocation();
   const onHandleSubmit = () => {
-    /* closeModal()
-    openNewModal() */
-    let otp = '';
+    let otp = "";
     inputRefs.current.forEach((input) => {
-      otp += input?.value || '';
+      otp += input?.value || "";
     });
-    console.log(otp)
-    console.log(location)
-  }
+    console.log(otp);
+    console.log(Email);
+
+    fetch("http://localhost:4000/verify", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email: Email, otp: otp }),
+    })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      return response.json();
+    })
+    .then((data) => {
+      if (data.message === 'OTP verified successfully') {
+        closeModal();
+        dispatch(setVerify({ isVerify: true }));
+        setData(["email", "verified"]);
+        openSuccessModal();
+      } else {
+        setErrorMessage(data.error || 'Error verifying OTP');
+      }
+    })
+    .catch((error) => {
+      console.error("Error Verifying otp:", error);
+      setErrorMessage('Error verifying OTP');
+    });
+  };
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
 
-  const handleKeyDown = (event :React.KeyboardEvent<HTMLInputElement>,index : number) => {
+  const handleKeyDown = (
+    event: React.KeyboardEvent<HTMLInputElement>,
+    index: number
+  ) => {
     const keyCode = event.keyCode || event.which;
-    const isNumericKey = (keyCode >= 48 && keyCode <= 57) || (keyCode >= 96 && keyCode <= 105);
+    const isNumericKey =
+      (keyCode >= 48 && keyCode <= 57) || (keyCode >= 96 && keyCode <= 105);
     const isBackspaceKey = keyCode === 8 || keyCode === 46;
 
     if (!isNumericKey && !isBackspaceKey) {
       event.preventDefault();
-      setErrorMessage('Please enter only numeric values.');
+      setErrorMessage("Please enter only numeric values.");
       return;
     } else {
-      setErrorMessage('');
+      setErrorMessage("");
     }
     if (keyCode >= 48 && keyCode <= 57) {
       const value = String.fromCharCode(keyCode);
       event.preventDefault();
 
       inputRefs.current[index]?.focus();
-      inputRefs.current[index]?.setAttribute('value', value);
-      inputRefs.current[index]?.dispatchEvent(new Event('input', { bubbles: true }));
+      inputRefs.current[index]?.setAttribute("value", value);
+      inputRefs.current[index]?.dispatchEvent(
+        new Event("input", { bubbles: true })
+      );
 
       if (index < inputRefs.current.length - 1) {
         inputRefs.current[index + 1]?.focus();
@@ -52,19 +94,21 @@ const OtpModal = ({closeModal,openNewModal}:Props) => {
 
       if (index >= 0) {
         inputRefs.current[index]?.blur();
-        inputRefs.current[index]?.setAttribute('value', '');
-        inputRefs.current[index]?.dispatchEvent(new Event('input', { bubbles: true }));
+        inputRefs.current[index]?.setAttribute("value", "");
+        inputRefs.current[index]?.dispatchEvent(
+          new Event("input", { bubbles: true })
+        );
 
         inputRefs.current[index - 1]?.focus();
       }
     }
-  }
+  };
   return (
     <div className="fixed top-0 left-0 z-50 w-full h-full bg-black bg-opacity-50 flex justify-center items-center">
       <div className="bg-white py-10 px-8 w-[435px] h-[312px] rounded-lg">
         <h2 className="text-2xl font-bold text-indigo">OTP VERIFICATION</h2>
         <p className="font-medium text-lg mb-3 text-gray-400">
-        Enter 4 digit one time password
+          Enter 4 digit one time password
         </p>
         <div className={`flex justify-between items-center w-96 px-8 my-6`}>
           {[0, 1, 2, 3].map((index) => (
@@ -77,7 +121,11 @@ const OtpModal = ({closeModal,openNewModal}:Props) => {
             />
           ))}
         </div>
-        {errorMessage && <span className="text-red-500 text-center ml-8 pb-3">{errorMessage}</span>}
+        {errorMessage && (
+          <span className="text-red-500 text-center ml-8 pb-3">
+            {errorMessage}
+          </span>
+        )}
         <div className="flex justify-between">
           <button
             onClick={closeModal}
@@ -94,7 +142,7 @@ const OtpModal = ({closeModal,openNewModal}:Props) => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default OtpModal
+export default OtpModal;

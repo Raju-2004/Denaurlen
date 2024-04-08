@@ -9,10 +9,6 @@ const UserSchema = mongoose.Schema({
         type : String,
         required : true
     },
-    Location : {
-        type : String,
-        required : true
-    },
     Email : {
         type : String,
         required :true,
@@ -20,10 +16,10 @@ const UserSchema = mongoose.Schema({
         lowercase: true,
         match: /^\S+@\S+\.\S+$/,
     },
-    username : {
+    UserName : {
         type : String,
         required : true,
-        unique: true
+        unique: true, // Ensure uniqueness of usernames
     },
     Password : {
         type : String,
@@ -31,5 +27,5 @@ const UserSchema = mongoose.Schema({
     }
 })
 
-const User = mongoose.model('user',UserSchema)
+const User = mongoose.model('User', UserSchema) // Changed the model name to 'User'
 module.exports = User

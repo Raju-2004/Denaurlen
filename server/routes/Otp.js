@@ -21,7 +21,7 @@ oAuth2Client.setCredentials({ refresh_token: REFRESH_TOKEN });
 
 const generateOTP = () => {
   const digits = "0123456789";
-  const limit = 4; // 6-digit OTP
+  const limit = 4;
   let otp = "";
   for (let i = 0; i < limit; i++) {
     otp += digits[Math.floor(Math.random() * 10)];
@@ -59,10 +59,11 @@ async function sendMail(email,otp) {
 }
 
 Router.post("/sendemail", async (req, res) => {
-  console.log(CLIENT_ID)
-  console.log(REFRESH_TOKEN)
-  console.log(CLIENT_SECRET)
   const { email } = req.body;
+  if (!email) {
+    return res.status(400).json({ error: "Email is required" });
+  }
+  console.log(email)
   const otp = generateOTP();
   const otpExpiration = Date.now() + 5 * 60 * 1000;
   savedOTPS[email] = { otp: String(otp), expiration: otpExpiration }; // Ensure OTP is stored as a string
@@ -78,11 +79,13 @@ Router.post("/sendemail", async (req, res) => {
 
 Router.post('/verify', (req, res) => {
     const { email, otp } = req.body;
+    console.log("body"+email+"--->"+otp)
     const savedOTP = savedOTPS[email]?.otp;
+    console.log("savedOTP= "+savedOTP)
     if (!savedOTP || savedOTP !== otp || savedOTPS[email].expiration < Date.now()) { // Compare OTPs as strings
-        res.status(400).send('Invalid OTP');
+      res.status(400).json({ error: 'Invalid OTP' });
     } else {
-        res.status(200).send('OTP verified successfully');
+      res.status(200).json({ message: 'OTP verified successfully' });
     }
 });
 
