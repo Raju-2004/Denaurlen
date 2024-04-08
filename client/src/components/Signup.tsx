@@ -37,6 +37,7 @@ const Signup = ({ openOtpModal, openCoinModal }: Props) => {
   const [errors, setErrors] = useState({
     Email: "",
     Password: "",
+    ConfirmPassword:""
   });
 
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -48,6 +49,7 @@ const Signup = ({ openOtpModal, openCoinModal }: Props) => {
 
     let emailErrorMessage = "";
     let passwordErrorMessage = "";
+    let ConfirmErrorMessage = "";
 
     if (name === "Email") {
       const isValidEmail = emailRegex.test(value);
@@ -61,10 +63,15 @@ const Signup = ({ openOtpModal, openCoinModal }: Props) => {
         : "Password should contain at least 6 characters";
     }
 
+    if (name === "ConfirmPassword" && value !== FormData.Password) {
+      ConfirmErrorMessage = "Passwords do not match"
+    }
+
     setErrors((prevErrors) => ({
       ...prevErrors,
       Email: emailErrorMessage,
       Password: passwordErrorMessage,
+      ConfirmPassword : ConfirmErrorMessage
     }));
   };
 
@@ -104,7 +111,7 @@ const Signup = ({ openOtpModal, openCoinModal }: Props) => {
         }
       })
       .catch((error) => {
-        console.error("Error sending email:", error);
+        console.error("Error creating user:", error);
       });
   };
 
@@ -206,7 +213,9 @@ const Signup = ({ openOtpModal, openCoinModal }: Props) => {
           icon={CiLock}
           handleChange={handleChange}
         />
-
+        {errors.ConfirmPassword && (
+          <span className="text-red-500">{errors.ConfirmPassword}</span>
+        )}
         <div className="flex w-96 my-5 gap-2">
           <div className="flex gap-2">
             <input type="checkbox" id="checkbox" />

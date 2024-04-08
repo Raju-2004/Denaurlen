@@ -1,26 +1,72 @@
 import { useState } from "react";
 import { IoPerson } from "react-icons/io5";
 import { CiLock } from "react-icons/ci";
-import { Link } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
+import { notifyError, notifySuccess, notifyWarn } from "./Config/toastConfig";
 import Input from "./Input";
 interface Props {
   openForgotModal: () => void;
 }
 const Signin = ({ openForgotModal }: Props) => {
+  const navigate = useNavigate();
+  const [FormData, SetFormData] = useState({
+    UserName: "",
+    Password: "",
+  });
 
-  const [FormData,SetFormData] = useState({
-    UserName : '',
-    Password : ''
-})
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    SetFormData({ ...FormData, [e.target.name]: e.target.value });
+  };
 
-  const handleChange = (e : React.ChangeEvent<HTMLInputElement>) => {
-    SetFormData({...FormData, [e.target.name]: e.target.value })
-}
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!FormData.UserName.trim()) {
+      notifyWarn("username is required");
+      return;
+    }
+    if (!FormData.Password.trim()) {
+      notifyWarn("password is required");
+      return;
+    }
+    fetch("http://localhost:4000/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(FormData),
+    })
+      .then(async(res) => {
+        const response = await res.json(); 
+        if(res.ok)
+        {
+          notifySuccess(response.message)
+          navigate('/categories')
+        }
+        else{
+          notifyError(response.message)
+        }
+      })
+      .catch((error) => {
+        console.error("Error logging user:", error);
+      });
+  };
   return (
     <div>
-      <form action="" className="mt-14">
-        <Input type={"text"} placeholder={"Username"} name={"UserName"} icon={IoPerson} handleChange={handleChange}/>
-        <Input type={"text"} placeholder={"Password"} name={"Password"} icon={CiLock} handleChange={handleChange}/>
+      <form action="" onSubmit={handleSubmit} className="mt-14">
+        <Input
+          type={"text"}
+          placeholder={"Username"}
+          name={"UserName"}
+          icon={IoPerson}
+          handleChange={handleChange}
+        />
+        <Input
+          type={"text"}
+          placeholder={"Password"}
+          name={"Password"}
+          icon={CiLock}
+          handleChange={handleChange}
+        />
         <div className="flex w-96 my-5 justify-between">
           <div>
             <input type="checkbox" id="checkbox" />

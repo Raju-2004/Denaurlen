@@ -1,4 +1,4 @@
-import { ToastOptions } from "react-toastify";
+import { ToastOptions,toast } from "react-toastify";
 export const toastConfig : ToastOptions = {
     position: "top-right",
     autoClose: 5000,
@@ -10,3 +10,11 @@ export const toastConfig : ToastOptions = {
     theme: "light",
   };
   
+
+  export const notifySuccess = (message: string) =>
+    toast.success(message, toastConfig);
+  export const notifyWarn = (errorMessage: string) =>
+    toast.error(errorMessage, toastConfig);
+  export const notifyError = (warnMessage : string) =>
+    toast.warn(warnMessage,toastConfig)
+

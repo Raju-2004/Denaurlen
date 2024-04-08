@@ -4,11 +4,14 @@ const cors = require("cors");
 const mongoose = require('mongoose')
 const { mongoDbUrL, PORT } = require("./config/configuration");
 
-const User = require('./models/UserSchema')
+
 const userRoutes = require('./routes/user')
 const otpRoutes = require('./routes/Otp')
 
-app.use(cors())
+app.use(cors({
+    origin: 'http://localhost:3000',
+    credentials: true,
+  }));
 app.use(express.urlencoded({extended:true}))
 app.use(express.json())
 

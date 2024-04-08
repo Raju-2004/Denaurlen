@@ -1,7 +1,6 @@
 import React, { useRef, useState } from "react";
 import { useLocation } from "react-router-dom";
-import { useAppSelector,useAppDispatch } from "../utils/AppStore";
-import Success from "./Success";
+import { useAppSelector, useAppDispatch } from "../utils/AppStore";
 import { setVerify } from "../utils/VerifySlice";
 
 interface Props {
@@ -16,7 +15,6 @@ const OtpModal = ({
   openSuccessModal,
   setData,
 }: Props) => {
-
   const dispatch = useAppDispatch();
   const Email = useAppSelector((state) => state.email.email);
   console.log(Email);
@@ -37,26 +35,31 @@ const OtpModal = ({
       },
       body: JSON.stringify({ email: Email, otp: otp }),
     })
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
-      }
-      return response.json();
-    })
-    .then((data) => {
-      if (data.message === 'OTP verified successfully') {
-        closeModal();
-        dispatch(setVerify({ isVerify: true }));
-        setData(["email", "verified"]);
-        openSuccessModal();
-      } else {
-        setErrorMessage(data.error || 'Error verifying OTP');
-      }
-    })
-    .catch((error) => {
-      console.error("Error Verifying otp:", error);
-      setErrorMessage('Error verifying OTP');
-    });
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        if (data.message === "OTP verified successfully") {
+          closeModal();
+          console.log(location.pathname);
+          if (location.pathname === "/auth/signup") {
+            dispatch(setVerify({ isVerify: true }));
+            setData(["email", "verified"]);
+            openSuccessModal();
+          } else if (location.pathname === "/auth/signin") {
+            openNewModal();
+          }
+        } else {
+          setErrorMessage(data.error || "Error verifying OTP");
+        }
+      })
+      .catch((error) => {
+        console.error("Error Verifying otp:", error);
+        setErrorMessage("Error verifying OTP");
+      });
   };
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
 

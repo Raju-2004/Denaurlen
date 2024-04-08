@@ -51,7 +51,7 @@ const Authentication = ({openModal,closeModal,isModalOpen}:Props) => {
         </div>
       </div>
       {isModalOpen === 'forgot' && (<ForgotModal closeModal={closeModal} openOtpModal = {() => openModal("otp")}/>)}
-      {isModalOpen === 'new' && (<NewModal closeModal={closeModal} openSuccessModal={() => openModal("success")}/>)}
+      {isModalOpen === 'new' && (<NewModal closeModal={closeModal} openSuccessModal={() => openModal("success")} setData={setOtpModalData}/>)}
       {isModalOpen === 'otp' && (<OtpModal closeModal={closeModal} openNewModal={() => openModal('new')} openSuccessModal={() => openModal("success")} setData={setOtpModalData} />)}
       {isModalOpen === 'success' && (<Success closeModal={closeModal} data={dataForSuccess}/>)}
       {isModalOpen === 'coin' && <CoinModal closeModal={closeModal}/>}
