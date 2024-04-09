@@ -209,7 +209,7 @@ const Signup = ({ openOtpModal, openCoinModal }: Props) => {
           handleChange={handleChange}
         />
         <Input
-          type={"text"}
+          type={"password"}
           placeholder={"Password"}
           name={"Password"}
           icon={CiLock}
@@ -219,7 +219,7 @@ const Signup = ({ openOtpModal, openCoinModal }: Props) => {
           <span className="text-red-500">{errors.Password}</span>
         )}
         <Input
-          type={"text"}
+          type={"password"}
           placeholder={"ConfirmPassword"}
           name={"ConfirmPassword"}
           icon={CiLock}
@@ -243,7 +243,7 @@ const Signup = ({ openOtpModal, openCoinModal }: Props) => {
           </button>
         </div>
       </form>
-      <div className="flex justify-center mt-1 w-96">
+      <div className="flex  gap-2 justify-center mt-1 w-96">
         <p>Already a member of Denaurlen?</p>
         <Link to="/auth/signin" className="text-indigo">
           Sign In

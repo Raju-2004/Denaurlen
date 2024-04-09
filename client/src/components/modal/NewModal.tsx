@@ -58,8 +58,8 @@ const NewModal = ({ closeModal,openSuccessModal,setData }: Props) => {
     <div className="fixed top-0 left-0 z-50 w-full h-full bg-black bg-opacity-50 flex justify-center items-center">
       <div className="bg-white py-10 px-8 w-[435px] h-[312px] rounded-lg">
         <h2 className="text-2xl font-bold text-indigo">CREATE NEW PASSWORD</h2>
-        <Input type={"text"} placeholder={"Password"} name={"Password"} icon={CiLock} handleChange={handleChange}/>
-        <Input type={"text"} placeholder={"ConfirmPassword"} name={"ConfirmPassword"} icon={CiLock} handleChange={handleChange}/>
+        <Input type={"password"} placeholder={"Password"} name={"Password"} icon={CiLock} handleChange={handleChange}/>
+        <Input type={"password"} placeholder={"ConfirmPassword"} name={"ConfirmPassword"} icon={CiLock} handleChange={handleChange}/>
         {confirmPasswordError && <span className="text-red-500">{confirmPasswordError}</span>}
         <div className="flex justify-between mt-4">
           <button

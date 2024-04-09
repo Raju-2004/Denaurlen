@@ -73,7 +73,7 @@ const Signin = ({ openForgotModal }: Props) => {
           handleChange={handleChange}
         />
         <Input
-          type={"text"}
+          type={"password"}
           placeholder={"Password"}
           name={"Password"}
           icon={CiLock}
