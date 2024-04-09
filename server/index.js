@@ -9,7 +9,7 @@ const userRoutes = require('./routes/user')
 const otpRoutes = require('./routes/Otp')
 
 app.use(cors({
-    origin: 'http://localhost:3000',
+    origin: 'https://denaurlen-brown.vercel.app/',
     credentials: true,
   }));
 app.use(express.urlencoded({extended:true}))
