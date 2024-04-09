@@ -114,9 +114,9 @@ const Signup = ({ openOtpModal, openCoinModal }: Props) => {
       .then((data) => {
         console.log(Response);
         console.log(data);
-        if(data.message === 'UserName or email already exists')
+        if(data.messagge === 'UserName or email already exists')
           {
-            notifyWarn('user already Exists');
+            notifyWarn('user already exists')
           }
         if (data.message === "User created successfully") {
           openCoinModal();
@@ -270,7 +270,7 @@ const Signup = ({ openOtpModal, openCoinModal }: Props) => {
         {/* Error message for terms and conditions */}
         <div className="flex justify-center items-center w-96 p-3 mt- text-lg bg-indigo text-white rounded-lg">
           <button className="w-full h-full" type="submit">
-            Sign In
+            Sign Up
           </button>
         </div>
       </form>
