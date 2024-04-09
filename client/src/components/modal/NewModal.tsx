@@ -19,9 +19,13 @@ const NewModal = ({ closeModal,openSuccessModal,setData }: Props) => {
     ConfirmPassword : ''
   })
 
+  const [passwordError, setPasswordError] = useState("");
   const [confirmPasswordError, setConfirmPasswordError] = useState("");
 
   const onHandleSubmit = () => {
+    if (passwordError || confirmPasswordError) {
+      return; // Do not submit if there are errors
+    }
     fetch(serverUrl+'changepassword',{
       method:"POST",
       headers:{
@@ -47,6 +51,11 @@ const NewModal = ({ closeModal,openSuccessModal,setData }: Props) => {
     const { name, value } = e.target;
     SetFormData({...FormData, [name]: value });
 
+    if (name === "Password") {
+      const isValidPassword = value.length >= 6;
+      setPasswordError(isValidPassword ? "" : "Password should contain at least 6 characters");
+    }
+
     if (name === "ConfirmPassword" && value !== FormData.Password) {
       setConfirmPasswordError("Passwords do not match");
     } else {
@@ -59,6 +68,7 @@ const NewModal = ({ closeModal,openSuccessModal,setData }: Props) => {
       <div className="bg-white py-10 px-8 w-[435px] h-[312px] rounded-lg">
         <h2 className="text-2xl font-bold text-indigo">CREATE NEW PASSWORD</h2>
         <Input type={"password"} placeholder={"Password"} name={"Password"} icon={CiLock} handleChange={handleChange}/>
+        {passwordError && <span className="text-red-500">{passwordError}</span>}
         <Input type={"password"} placeholder={"ConfirmPassword"} name={"ConfirmPassword"} icon={CiLock} handleChange={handleChange}/>
         {confirmPasswordError && <span className="text-red-500">{confirmPasswordError}</span>}
         <div className="flex justify-between mt-4">
