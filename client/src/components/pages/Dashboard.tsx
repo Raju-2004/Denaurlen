@@ -1,7 +1,21 @@
+import { useEffect } from "react";
 import img from "../../assets/Group 124.png";
 import img1 from "../../assets/Frame.svg";
 import Account from "../Account";
+import { useNavigate } from "react-router-dom";
+import { notifyWarn } from "../Config/toastConfig";
+import { useCookies } from 'react-cookie';
 const Dashboard = () => {
+  const [cookies] = useCookies(['userAuth']); // Read the cookie named 'userAuth'
+  const userEmail = cookies.userAuth;
+  const navigate = useNavigate();
+  console.log(userEmail);
+  useEffect(() => {
+    if (!userEmail) {
+      navigate("/auth/signin");
+      notifyWarn("You must log in"); 
+    }
+  }, [userEmail, navigate]);
   return (
     <div className="h-[100vh]">
       <div className="flex justify-between h-16">
@@ -18,11 +32,13 @@ const Dashboard = () => {
         </div>
       </div>
       <div className="bg-light_gray grid grid-cols-2">
-        <div className="flex-col justify-center items-center">
-          <img src={img1} className="w-56" alt="" />
-          <div>
-            <p>“Good company in a journey makes the way seems shorter.”</p>
-            <p>- Izzak Walton</p>
+        <div className=" mt-20">
+          <div className="flex justify-center items-center">
+          <img src={img1} className="w-72 mr-22" alt="" />
+          </div>
+          <div className="mt-7 text-center font-semibold ">
+            <p className="leading-9">“Good company in a journey makes the way seems shorter.”</p>
+            <p className="ml-[310px]">- Izzak Walton</p>
           </div>
         </div>
         <div className="mt-14 bg-white px-20 py-9">

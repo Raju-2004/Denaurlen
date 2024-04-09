@@ -5,11 +5,15 @@ import { useNavigate, Link } from "react-router-dom";
 import { notifyError, notifySuccess, notifyWarn } from "./Config/toastConfig";
 import Input from "./Input";
 import img from '../assets/search 1.svg'
+import { useCookies } from 'react-cookie';
 
 interface Props {
   openForgotModal: () => void;
 }
 const Signin = ({ openForgotModal }: Props) => {
+
+  const [cookies, setCookie] = useCookies(['userAuth'])
+
   const navigate = useNavigate();
   const [FormData, SetFormData] = useState({
     UserName: "",
@@ -42,7 +46,11 @@ const Signin = ({ openForgotModal }: Props) => {
         console.log(response);
         if(res.ok)
         {
+          const token = response.token;
+          const decodedToken = JSON.parse(atob(token.split('.')[1]));
+          console.log(decodedToken.id); 
           notifySuccess(response.message)
+          setCookie('userAuth', decodedToken.id, { path: '/' });
           navigate('/categories')
         }
         else{

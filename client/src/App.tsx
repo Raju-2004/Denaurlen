@@ -22,7 +22,7 @@ function App() {
   const closeModal = () => {
     setIsModalOpen(null);
   };
-  return (
+  return (  
     <Provider store={appStore}>
       <div className="">
 

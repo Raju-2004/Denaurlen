@@ -1,6 +1,9 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Category from "../Category";
 import img from "../../assets/Group 124.png";
+import { useNavigate } from "react-router-dom";
+import { notifyWarn } from "../Config/toastConfig";
+import { useCookies } from 'react-cookie';
 import {
   travelIcon,
   brandsIcon,
@@ -58,7 +61,30 @@ const CategoryPage = () => {
     { img: travelIcon11, text: "Movies" },
   ]);
 
-  const [itemCount,setItemCount] = useState<number>(0);
+  const getTokenFromCookie = (): string | null => {
+    const cookieString = document.cookie;
+    const cookies = cookieString.split('; ').reduce((acc: { [key: string]: string }, cookie) => {
+      const [name, value] = cookie.split('=');
+      acc[name] = value;
+      return acc;
+    }, {});
+  
+    return cookies['token'] || null;
+  };
+  
+  const token = getTokenFromCookie();
+
+  console.log(token)
+  const [cookies] = useCookies(['userAuth']); // Read the cookie named 'userAuth'
+  const userEmail = cookies.userAuth;
+  const navigate = useNavigate();
+  console.log(userEmail);
+ useEffect(()=> {
+  if (!userEmail) {
+    navigate("/auth/signin");
+    notifyWarn("You must log in"); 
+  }
+ },[])
   return (
     <div className="h-[100vh]">
       <div className="flex justify-between h-16">

@@ -41,10 +41,10 @@ router.post("/signup", async (req, res) => {
 });
 
 const JWT_SECRET = process.env.ACCESS_SECRET_TOKEN || "secret-key";
-const JWT_EXPIRATION = 3600000
+const JWT_EXPIRATION = '1m'
 
 const generateToken = (user) => {
-  return jwt.sign({ id: user._id }, JWT_SECRET, { expiresIn: JWT_EXPIRATION });
+  return jwt.sign({ id: user.Email }, JWT_SECRET, { expiresIn: JWT_EXPIRATION });
 };
 
 router.post('/login', async (req,res)=>{
@@ -65,8 +65,7 @@ router.post('/login', async (req,res)=>{
 
     const token = generateToken(user);
 
-    res.cookie('token', token, { httpOnly: true, maxAge: JWT_EXPIRATION });
-    res.status(200).json({ message: "Login successful" });
+    res.status(200).json({ token ,message: "Login successful" });
 
   } catch (err) {
     console.error(err);
