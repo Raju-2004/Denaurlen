@@ -8,9 +8,14 @@ const { mongoDbUrL, PORT } = require("./config/configuration");
 const userRoutes = require('./routes/user')
 const otpRoutes = require('./routes/Otp')
 
+// app.use(cors({
+//     origin: 'https://denaurlen-brown.vercel.app/',
+//   }));
 app.use(cors({
-    origin: 'https://denaurlen-brown.vercel.app/',
-  }));
+    origin: 'https://denaurlen-brown.vercel.app',
+    methods: ['GET', 'POST'],
+    credentials: true, // Enable sending cookies across domains
+}));
 
 app.use(express.urlencoded({extended:true}))
 app.use(express.json())
