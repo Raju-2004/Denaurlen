@@ -79,12 +79,12 @@ const CategoryPage = () => {
   const userEmail = cookies.userAuth;
   const navigate = useNavigate();
   console.log(userEmail);
- useEffect(()=> {
-  if (!userEmail) {
-    navigate("/auth/signin");
-    notifyWarn("You must log in"); 
-  }
- },[])
+  useEffect(() => {
+    if (!userEmail) {
+      navigate("/auth/signin");
+      notifyWarn("You must log in"); 
+    }
+  }, [userEmail, navigate]);
   return (
     <div className="h-[100vh]">
       <div className="flex justify-between h-16">
