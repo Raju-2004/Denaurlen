@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { IoPerson } from "react-icons/io5";
 import { Link } from "react-router-dom";
-import { notifyError, notifySuccess } from "./Config/toastConfig";
+import { notifyError, notifySuccess, notifyWarn } from "./Config/toastConfig";
 import { MdOutlineAlternateEmail } from "react-icons/md";
 import { CiLock } from "react-icons/ci";
 import Input from "./Input";
@@ -114,6 +114,10 @@ const Signup = ({ openOtpModal, openCoinModal }: Props) => {
       .then((data) => {
         console.log(Response);
         console.log(data);
+        if(data.message === 'UserName or email already exists')
+          {
+            notifyWarn('user already Exists');
+          }
         if (data.message === "User created successfully") {
           openCoinModal();
           notifySuccess("Sign up Successful");
@@ -147,6 +151,7 @@ const Signup = ({ openOtpModal, openCoinModal }: Props) => {
       .then((data) => {
         openOtpModal();
         /* setEmailVerified(true) */
+
         console.log(data); // Handle response data as needed
       })
       .catch((error) => {

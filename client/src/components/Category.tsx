@@ -10,7 +10,6 @@ interface Props {
 const Category = ({ img, text }: Props) => {
   const dispatch = useAppDispatch();
   const items = useAppSelector((state) => state.category.items);
-  const [Count,setCount] = useState<number>(0);
   const [selected, setSelected] = useState(false);
   console.log(items);
   const handleClick = () => {
