@@ -36,7 +36,7 @@ const Authentication = ({openModal,closeModal,isModalOpen}:Props) => {
         </div>
         <Outlet/>
         <div className="w-96 mt-16 flex-col justify-center items-center">
-            <p className="text-indigo text-center">Privacy Policy</p>
+            <p className="text-indigo text-center cursor-pointer">Privacy Policy</p>
             <p>Denaurlen Copyright @ 2021, All Rights Reserved</p>
         </div>
       </div>

@@ -17,14 +17,13 @@ interface Props {
 }
 
 const Signup = ({ openOtpModal, openCoinModal }: Props) => {
-
-
   const serverUrl = process.env.REACT_APP_SERVER_URL;
 
   const dispatch = useAppDispatch();
   const isVerify = useAppSelector((state) => state.Verify.isVerify);
   const isLoad = useAppSelector((state) => state.Load.isLoad);
   const [formSubmitted, setFormSubmitted] = useState<boolean>(false);
+  const [isTermsAccepted, setIsTermsAccepted] = useState<boolean>(false);
 
   const [FormData, SetFormData] = useState({
     FirstName: "",
@@ -39,6 +38,7 @@ const Signup = ({ openOtpModal, openCoinModal }: Props) => {
     Email: "",
     Password: "",
     ConfirmPassword: "",
+    Terms: "",
   });
 
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -94,8 +94,16 @@ const Signup = ({ openOtpModal, openCoinModal }: Props) => {
       console.log("Please correct the validation errors before submitting.");
       return;
     }
+    if (!isTermsAccepted) {
+      // Check if terms are accepted
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        Terms: "Please accept terms & conditions",
+      }));
+      return;
+    }
     console.log(FormData);
-    fetch(serverUrl+"signup", {
+    fetch(serverUrl + "signup", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -117,7 +125,6 @@ const Signup = ({ openOtpModal, openCoinModal }: Props) => {
   };
 
   const onVerifyClick = () => {
-    dispatch(setLoad({ isLoad: true }));
     const isValidEmail = emailRegex.test(FormData.Email);
     if (!isValidEmail) {
       setErrors((prevErrors) => ({
@@ -126,9 +133,10 @@ const Signup = ({ openOtpModal, openCoinModal }: Props) => {
       }));
       return;
     }
+    dispatch(setLoad({ isLoad: true }));
     dispatch(setEmail({ email: FormData.Email }));
     console.log("sending mail");
-    fetch(serverUrl+"sendemail", {
+    fetch(serverUrl + "sendemail", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -147,6 +155,16 @@ const Signup = ({ openOtpModal, openCoinModal }: Props) => {
       .finally(() => {
         dispatch(setLoad({ isLoad: false }));
       });
+  };
+
+  const handleTermsCheckboxChange = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setIsTermsAccepted(e.target.checked);
+    setErrors((prevErrors) => ({
+      ...prevErrors,
+      Terms: "",
+    }));
   };
 
   return (
@@ -228,15 +246,23 @@ const Signup = ({ openOtpModal, openCoinModal }: Props) => {
         {errors.ConfirmPassword && (
           <span className="text-red-500">{errors.ConfirmPassword}</span>
         )}
-        <div className="flex w-96 my-5 gap-2">
+        <div className="flex flex-col w-96 my-5 gap-1">
           <div className="flex gap-2">
-            <input type="checkbox" id="checkbox" />
-            <label htmlFor="checkbox">Accept Terms & Conditions.</label>
+            <div className="flex gap-2">
+              <input
+                type="checkbox"
+                id="checkbox"
+                onChange={handleTermsCheckboxChange}
+              />
+              <label htmlFor="checkbox">Accept Terms & Conditions.</label>
+            </div>
+            <Link to="#" className="text-indigo cursor-pointer">
+              ClickHere
+            </Link>
           </div>
-          <Link to="#" className="text-indigo cursor-pointer">
-            ClickHere
-          </Link>
+          {errors.Terms && <span className="text-red-500">{errors.Terms}</span>}
         </div>
+        {/* Error message for terms and conditions */}
         <div className="flex justify-center items-center w-96 p-3 mt- text-lg bg-indigo text-white rounded-lg">
           <button className="w-full h-full" type="submit">
             Sign In
