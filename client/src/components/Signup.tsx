@@ -17,6 +17,10 @@ interface Props {
 }
 
 const Signup = ({ openOtpModal, openCoinModal }: Props) => {
+
+
+  const serverUrl = process.env.REACT_APP_SERVER_URL;
+
   const dispatch = useAppDispatch();
   const isVerify = useAppSelector((state) => state.Verify.isVerify);
   const isLoad = useAppSelector((state) => state.Load.isLoad);
@@ -91,7 +95,7 @@ const Signup = ({ openOtpModal, openCoinModal }: Props) => {
       return;
     }
     console.log(FormData);
-    fetch("http://localhost:4000/signup", {
+    fetch(serverUrl+"signup", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -124,7 +128,7 @@ const Signup = ({ openOtpModal, openCoinModal }: Props) => {
     }
     dispatch(setEmail({ email: FormData.Email }));
     console.log("sending mail");
-    fetch("http://localhost:4000/sendemail", {
+    fetch(serverUrl+"sendemail", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

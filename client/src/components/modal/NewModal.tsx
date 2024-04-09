@@ -10,6 +10,8 @@ interface Props {
 }
 const NewModal = ({ closeModal,openSuccessModal,setData }: Props) => {
 
+  const serverUrl = process.env.REACT_APP_SERVER_URL;
+
   const Email = useAppSelector((state) => state.email.email);
 
   const [FormData,SetFormData] = useState({
@@ -20,7 +22,7 @@ const NewModal = ({ closeModal,openSuccessModal,setData }: Props) => {
   const [confirmPasswordError, setConfirmPasswordError] = useState("");
 
   const onHandleSubmit = () => {
-    fetch('http://localhost:4000/changepassword',{
+    fetch(serverUrl+'changepassword',{
       method:"POST",
       headers:{
         'Content-Type':"application/json"

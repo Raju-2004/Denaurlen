@@ -12,6 +12,8 @@ interface Props {
 
 const ForgotModal = ({ closeModal, openOtpModal }: Props) => {
 
+  const serverUrl = process.env.REACT_APP_SERVER_URL;
+
   const dispatch = useAppDispatch();
   const isLoad = useAppSelector((state)=> state.Load.isLoad)
   // const [isUserMail, SetIsUserMail] = useState<boolean>(false);
@@ -25,7 +27,7 @@ const ForgotModal = ({ closeModal, openOtpModal }: Props) => {
   const sendEmail = async () => {
     try {
       console.log('sending mail');
-      const response = await fetch("http://localhost:4000/sendemail", {
+      const response = await fetch(serverUrl+"sendemail", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -44,7 +46,7 @@ const ForgotModal = ({ closeModal, openOtpModal }: Props) => {
   const onHandleSubmit = async () => {
     dispatch(setLoad({isLoad:true}))
     try {
-      const response = await fetch("http://localhost:4000/checkmail", {
+      const response = await fetch(serverUrl+"checkmail", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

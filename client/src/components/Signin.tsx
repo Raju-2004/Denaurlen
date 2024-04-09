@@ -13,6 +13,7 @@ interface Props {
 const Signin = ({ openForgotModal }: Props) => {
 
   const [cookies, setCookie] = useCookies(['userAuth'])
+  const serverUrl = process.env.REACT_APP_SERVER_URL;
 
   const navigate = useNavigate();
   const [FormData, SetFormData] = useState({
@@ -34,7 +35,7 @@ const Signin = ({ openForgotModal }: Props) => {
       notifyWarn("password is required");
       return;
     }
-    fetch("http://localhost:4000/login", {
+    fetch(serverUrl+"login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

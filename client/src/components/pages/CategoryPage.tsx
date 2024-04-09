@@ -3,7 +3,7 @@ import Category from "../Category";
 import img from "../../assets/Group 124.png";
 import { useNavigate } from "react-router-dom";
 import { notifyWarn } from "../Config/toastConfig";
-import { useCookies } from 'react-cookie';
+import { useCookies } from "react-cookie";
 import {
   travelIcon,
   brandsIcon,
@@ -31,6 +31,7 @@ import {
   travelIcon11,
 } from "../Config/Images";
 import { Link } from "react-router-dom";
+import { useAppSelector } from "../store/AppStore";
 
 // import
 const CategoryPage = () => {
@@ -61,28 +62,15 @@ const CategoryPage = () => {
     { img: travelIcon11, text: "Movies" },
   ]);
 
-  const getTokenFromCookie = (): string | null => {
-    const cookieString = document.cookie;
-    const cookies = cookieString.split('; ').reduce((acc: { [key: string]: string }, cookie) => {
-      const [name, value] = cookie.split('=');
-      acc[name] = value;
-      return acc;
-    }, {});
-  
-    return cookies['token'] || null;
-  };
-  
-  const token = getTokenFromCookie();
-
-  console.log(token)
-  const [cookies] = useCookies(['userAuth']); // Read the cookie named 'userAuth'
+  const items = useAppSelector((state) => state.category.items);
+  const [cookies] = useCookies(["userAuth"]); // Read the cookie named 'userAuth'
   const userEmail = cookies.userAuth;
   const navigate = useNavigate();
   console.log(userEmail);
   useEffect(() => {
     if (!userEmail) {
       navigate("/auth/signin");
-      notifyWarn("You must log in"); 
+      notifyWarn("You must log in");
     }
   }, [userEmail, navigate]);
   return (
@@ -108,7 +96,14 @@ const CategoryPage = () => {
           ))}
         </div>
         <div className="mt-8 flex justify-center items-center">
-          <Link to="/dashboard" className="shadow-sm w-20 h-10 px-5 pt-2 bg-indigo text-white rounded-lg">Next</Link>
+          <Link
+            to="/dashboard"
+            className={`shadow-sm w-20 h-10 px-5 pt-2 bg-indigo text-white rounded-lg ${
+              items.length !== 10 ? "pointer-events-none opacity-50" : ""
+            }`}
+          >
+            Next
+          </Link>
         </div>
       </div>
     </div>

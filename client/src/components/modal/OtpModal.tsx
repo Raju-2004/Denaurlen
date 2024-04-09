@@ -15,6 +15,8 @@ const OtpModal = ({
   openSuccessModal,
   setData,
 }: Props) => {
+
+  const serverUrl = process.env.REACT_APP_SERVER_URL;
   const dispatch = useAppDispatch();
   const Email = useAppSelector((state) => state.email.email);
   console.log(Email);
@@ -28,7 +30,7 @@ const OtpModal = ({
     console.log(otp);
     console.log(Email);
 
-    fetch("http://localhost:4000/verify", {
+    fetch(serverUrl+"verify", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
