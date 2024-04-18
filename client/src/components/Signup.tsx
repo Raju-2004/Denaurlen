@@ -140,6 +140,7 @@ const Signup = ({ openOtpModal, openCoinModal }: Props) => {
     dispatch(setLoad({ isLoad: true }));
     dispatch(setEmail({ email: FormData.Email }));
     console.log("sending mail");
+    console.log('Email to be sent : '+ FormData.Email)
     fetch(serverUrl + "sendemail", {
       method: "POST",
       headers: {
@@ -151,7 +152,6 @@ const Signup = ({ openOtpModal, openCoinModal }: Props) => {
       .then((data) => {
         openOtpModal();
         /* setEmailVerified(true) */
-
         console.log(data); // Handle response data as needed
       })
       .catch((error) => {

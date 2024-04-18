@@ -32,6 +32,7 @@ const generateOTP = () => {
 async function sendMail(email,otp) {
   try {
     const access_token = await oAuth2Client.getAccessToken();
+    console.log(REFRESH_TOKEN);
     const transport = nm.createTransport({
       service: "gmail",
       auth: {
