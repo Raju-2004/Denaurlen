@@ -71,7 +71,7 @@ Router.post("/sendemail", async (req, res) => {
   try {
     const result = await sendMail(email, otp);
     console.log(result);
-    if(result.accepted)
+    if(result.accepted[0])
     {
       res.status(200).json({ message: "Email sent successfully" });
     }
