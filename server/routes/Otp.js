@@ -70,8 +70,12 @@ Router.post("/sendemail", async (req, res) => {
   savedOTPS[email] = { otp: String(otp), expiration: otpExpiration }; // Ensure OTP is stored as a string
   try {
     const result = await sendMail(email, otp);
+    console.log(result);
+    if(result.accepted)
+    {
+      res.status(200).json({ message: "Email sent successfully" });
+    }
     console.log("Email sent:", result);
-    res.status(200).json({ message: "Email sent successfully" });
   } catch (error) {
     console.error("Error sending email:", error);
     res.status(500).json({ error: "Failed to send email" });
