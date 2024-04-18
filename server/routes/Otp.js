@@ -71,11 +71,8 @@ Router.post("/sendemail", async (req, res) => {
   try {
     const result = await sendMail(email, otp);
     console.log(result);
-    if(result.accepted[0])
-    {
-      res.status(200).json({ message: "Email sent successfully" });
-    }
     console.log("Email sent:", result);
+    res.status(200).json({ message: "Email sent successfully" });
   } catch (error) {
     console.error("Error sending email:", error);
     res.status(500).json({ error: "Failed to send email" });
